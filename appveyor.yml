@@ -1,0 +1,35 @@
+-
+  branches:
+    only:
+      - master
+
+  version: 0.0.1-build{build}
+  configuration: Release
+
+  environment:
+    DNX_BUILD_VERSION: build%APPVEYOR_BUILD_NUMBER%
+
+  before_build:
+  - cmd: dnu restore .
+
+  artifacts:
+  - path: artifacts\bin\**\*.nupkg
+
+  nuget:
+    disable_publish_on_pr: true
+
+-
+  version: 0.0.1-build{build}-{branch}
+  configuration: Debug
+
+  environment:
+    DNX_BUILD_VERSION: build%APPVEYOR_BUILD_NUMBER%-%APPVEYOR_REPO_BRANCH%
+
+  before_build:
+  - cmd: dnu restore .
+
+  artifacts:
+  - path: artifacts\bin\**\*.nupkg
+
+  nuget:
+    disable_publish_on_pr: true
