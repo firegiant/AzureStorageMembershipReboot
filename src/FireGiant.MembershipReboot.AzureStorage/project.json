@@ -1,0 +1,17 @@
+﻿{
+  "version": "0.0.1-*",
+  "description": "MembershipReboot using Azure Storage",
+  "authors": [ "FireGiant" ],
+  "tags": [ "" ],
+  "projectUrl": "https://github.com/firegiant/AzureStorageMembershipReboot",
+  "licenseUrl": "",
+
+  "dependencies": {
+    "BrockAllen.MembershipReboot": "8.4.0",
+    "WindowsAzure.Storage": "6.2.0"
+  },
+
+  "frameworks": {
+    "net451": { }
+  }
+}

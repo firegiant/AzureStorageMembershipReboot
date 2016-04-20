@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25123.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{20D1EAF3-7E0D-468E-BB48-6AD40D762CA9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{12D8F2EB-DC0B-4D07-911B-BF7A37C339EC}"
+	ProjectSection(SolutionItems) = preProject
+		global.json = global.json
+	EndProjectSection
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "FireGiant.MembershipReboot.AzureStorage", "src\FireGiant.MembershipReboot.AzureStorage\FireGiant.MembershipReboot.AzureStorage.xproj", "{3CF41831-C06D-4705-B043-A87CA58F7C9D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3CF41831-C06D-4705-B043-A87CA58F7C9D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3CF41831-C06D-4705-B043-A87CA58F7C9D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3CF41831-C06D-4705-B043-A87CA58F7C9D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3CF41831-C06D-4705-B043-A87CA58F7C9D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{3CF41831-C06D-4705-B043-A87CA58F7C9D} = {20D1EAF3-7E0D-468E-BB48-6AD40D762CA9}
+	EndGlobalSection
+EndGlobal
