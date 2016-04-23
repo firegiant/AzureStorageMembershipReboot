@@ -9,17 +9,17 @@ using Microsoft.WindowsAzure.Storage.Table;
 
 namespace FireGiant.MembershipReboot.AzureStorage
 {
-    public class AtsUserAccountRepository : IUserAccountRepository<AtsUserAccount>
+    public class AtsUserRepository : IUserAccountRepository<AtsUser>
     {
         private readonly string _defaultTenant;
         private readonly CloudTable _table;
 
-        public AtsUserAccountRepository(AtsUserAccountConfig config)
+        public AtsUserRepository(AtsUserServiceConfig config)
             : this(CloudStorageAccount.Parse(config.TableStorageConnectionString), config)
         {
         }
 
-        public AtsUserAccountRepository(CloudStorageAccount storage, AtsUserAccountConfig config)
+        public AtsUserRepository(CloudStorageAccount storage, AtsUserServiceConfig config)
         {
             _defaultTenant = config.DefaultTenant;
 
@@ -28,12 +28,12 @@ namespace FireGiant.MembershipReboot.AzureStorage
             _table.CreateIfNotExists();
         }
 
-        public AtsUserAccount Create()
+        public AtsUser Create()
         {
-            return new AtsUserAccount();
+            return new AtsUser();
         }
 
-        public void Add(AtsUserAccount user)
+        public void Add(AtsUser user)
         {
             user.SetEntityKeys();
 
@@ -54,7 +54,7 @@ namespace FireGiant.MembershipReboot.AzureStorage
             this.ExecuteOperations(operations);
         }
 
-        public void Remove(AtsUserAccount user)
+        public void Remove(AtsUser user)
         {
             user.SetEntityKeys();
 
@@ -75,7 +75,7 @@ namespace FireGiant.MembershipReboot.AzureStorage
             this.ExecuteOperations(operations);
         }
 
-        public void Update(AtsUserAccount user)
+        public void Update(AtsUser user)
         {
             user.SetEntityKeys();
             user.ETag = "*";
@@ -124,59 +124,59 @@ namespace FireGiant.MembershipReboot.AzureStorage
             this.ExecuteOperations(operations);
         }
 
-        public AtsUserAccount GetByID(Guid id)
+        public AtsUser GetByID(Guid id)
         {
-            var key = AtsUserAccountKey.ForUserId(id);
+            var key = AtsUserKey.ForUserId(id);
 
-            var op = TableOperation.Retrieve<AtsUserAccount>(key.Partition, key.Row);
+            var op = TableOperation.Retrieve<AtsUser>(key.Partition, key.Row);
 
             var result = _table.Execute(op);
 
-            return (AtsUserAccount)result.Result;
+            return (AtsUser)result.Result;
         }
 
-        public AtsUserAccount GetByUsername(string username)
+        public AtsUser GetByUsername(string username)
         {
             return this.GetByUsername(_defaultTenant, username);
         }
 
-        public AtsUserAccount GetByUsername(string tenant, string username)
+        public AtsUser GetByUsername(string tenant, string username)
         {
             var referenceKey = AtsUserReferenceKey.ForUsername(tenant, username);
-            return this.GetUserAccountByReference(referenceKey);
+            return this.GetUserByReference(referenceKey);
         }
 
-        public AtsUserAccount GetByEmail(string tenant, string email)
+        public AtsUser GetByEmail(string tenant, string email)
         {
             var referenceKey = AtsUserReferenceKey.ForEmail(tenant, email);
-            return this.GetUserAccountByReference(referenceKey);
+            return this.GetUserByReference(referenceKey);
         }
 
-        public AtsUserAccount GetByMobilePhone(string tenant, string phone)
+        public AtsUser GetByMobilePhone(string tenant, string phone)
         {
             var referenceKey = AtsUserReferenceKey.ForPhoneNumber(tenant, phone);
-            return this.GetUserAccountByReference(referenceKey);
+            return this.GetUserByReference(referenceKey);
         }
 
-        public AtsUserAccount GetByVerificationKey(string key)
+        public AtsUser GetByVerificationKey(string key)
         {
             var referenceKey = AtsUserReferenceKey.ForVerificationKey(key);
-            return this.GetUserAccountByReference(referenceKey);
+            return this.GetUserByReference(referenceKey);
         }
 
-        public AtsUserAccount GetByLinkedAccount(string tenant, string provider, string id)
+        public AtsUser GetByLinkedAccount(string tenant, string provider, string id)
         {
             var referenceKey = AtsUserReferenceKey.ForLinkedAccount(tenant, provider, id);
-            return this.GetUserAccountByReference(referenceKey);
+            return this.GetUserByReference(referenceKey);
         }
 
-        public AtsUserAccount GetByCertificate(string tenant, string thumbprint)
+        public AtsUser GetByCertificate(string tenant, string thumbprint)
         {
             var referenceKey = AtsUserReferenceKey.ForCertificate(tenant, thumbprint);
-            return this.GetUserAccountByReference(referenceKey);
+            return this.GetUserByReference(referenceKey);
         }
 
-        private AtsUserAccount GetUserAccountByReference(AtsUserReferenceKey referenceKey)
+        private AtsUser GetUserByReference(AtsUserReferenceKey referenceKey)
         {
             var op = TableOperation.Retrieve<AtsUserReference>(referenceKey.Partition, referenceKey.Row);
 
@@ -189,16 +189,16 @@ namespace FireGiant.MembershipReboot.AzureStorage
 
             var reference = (AtsUserReference)result.Result;
 
-            var userKey = AtsUserAccountKey.ForUserId(reference.UserId);
+            var userKey = AtsUserKey.ForUserId(reference.UserId);
 
-            op = TableOperation.Retrieve<AtsUserAccount>(userKey.Partition, userKey.Row);
+            op = TableOperation.Retrieve<AtsUser>(userKey.Partition, userKey.Row);
 
             result = _table.Execute(op);
 
-            return (AtsUserAccount)result.Result;
+            return (AtsUser)result.Result;
         }
 
-        private AtsUserReference CreateUsernameReference(AtsUserAccount user, bool original = false)
+        private AtsUserReference CreateUsernameReference(AtsUser user, bool original = false)
         {
             var value = original ? user.OriginalUserName : user.Username;
             if (String.IsNullOrEmpty(value))
@@ -210,7 +210,7 @@ namespace FireGiant.MembershipReboot.AzureStorage
             return new AtsUserReference(referenceKey, user.ID) { ETag = "*" };
         }
 
-        private AtsUserReference CreateEmailReference(AtsUserAccount user, bool original = false)
+        private AtsUserReference CreateEmailReference(AtsUser user, bool original = false)
         {
             var value = original ? user.OriginalEmail : user.Email;
             if (String.IsNullOrEmpty(value))
@@ -222,7 +222,7 @@ namespace FireGiant.MembershipReboot.AzureStorage
             return new AtsUserReference(referenceKey, user.ID) { ETag = "*" };
         }
 
-        private AtsUserReference CreatePhoneReference(AtsUserAccount user, bool original = false)
+        private AtsUserReference CreatePhoneReference(AtsUser user, bool original = false)
         {
             var value = original ? user.OriginalPhoneNumber : user.MobilePhoneNumber;
             if (String.IsNullOrEmpty(value))
@@ -234,7 +234,7 @@ namespace FireGiant.MembershipReboot.AzureStorage
             return new AtsUserReference(referenceKey, user.ID) { ETag = "*" };
         }
 
-        private AtsUserReference CreateVerificationKeyReference(AtsUserAccount user, bool original = false)
+        private AtsUserReference CreateVerificationKeyReference(AtsUser user, bool original = false)
         {
             var value = original ? user.OriginalVerificationKey : user.VerificationKey;
             if (String.IsNullOrEmpty(value))

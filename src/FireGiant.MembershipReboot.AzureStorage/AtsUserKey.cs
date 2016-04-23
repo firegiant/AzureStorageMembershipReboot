@@ -4,9 +4,9 @@ using System;
 
 namespace FireGiant.MembershipReboot.AzureStorage
 {
-    internal class AtsUserAccountKey
+    internal class AtsUserKey
     {
-        private AtsUserAccountKey(Guid userId)
+        private AtsUserKey(Guid userId)
         {
             this.Partition = CalculatePartitionKeyForUserId(userId);
             this.Row = String.Empty;
@@ -16,9 +16,9 @@ namespace FireGiant.MembershipReboot.AzureStorage
 
         public string Row { get; }
 
-        public static AtsUserAccountKey ForUserId(Guid userId)
+        public static AtsUserKey ForUserId(Guid userId)
         {
-            return new AtsUserAccountKey(userId);
+            return new AtsUserKey(userId);
         }
 
         private static string CalculatePartitionKeyForUserId(Guid userId)

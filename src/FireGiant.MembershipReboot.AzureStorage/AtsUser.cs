@@ -11,13 +11,13 @@ using Microsoft.WindowsAzure.Storage.Table;
 
 namespace FireGiant.MembershipReboot.AzureStorage
 {
-    public class AtsUserAccount : HierarchicalUserAccount, ITableEntity
+    public class AtsUser : HierarchicalUserAccount, ITableEntity
     {
         private const string ClaimValueEncodedPrefix = "base64:";
         private const string ClaimNameValueSeparator = "=";
         private const string ClaimSeparator = "\n";
 
-        public AtsUserAccount()
+        public AtsUser()
         {
         }
 
@@ -233,9 +233,9 @@ namespace FireGiant.MembershipReboot.AzureStorage
         {
         }
 
-        internal AtsUserAccount SetEntityKeys()
+        internal AtsUser SetEntityKeys()
         {
-            var key = AtsUserAccountKey.ForUserId(this.ID);
+            var key = AtsUserKey.ForUserId(this.ID);
 
             this.PartitionKey = key.Partition;
             this.RowKey = key.Row;

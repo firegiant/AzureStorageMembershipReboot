@@ -5,14 +5,14 @@ using BrockAllen.MembershipReboot;
 
 namespace FireGiant.MembershipReboot.AzureStorage
 {
-    public class AtsUserAccountConfig : MembershipRebootConfiguration<AtsUserAccount>
+    public class AtsUserServiceConfig : MembershipRebootConfiguration<AtsUser>
     {
-        public AtsUserAccountConfig()
+        public AtsUserServiceConfig()
             : this(null)
         {
         }
 
-        public AtsUserAccountConfig(string connectionString, string tableName = null, string tenant = null)
+        public AtsUserServiceConfig(string connectionString, string tableName = null, string tenant = null)
         {
             this.TableStorageConnectionString = connectionString;
 

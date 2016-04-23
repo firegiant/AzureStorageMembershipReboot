@@ -4,9 +4,9 @@ using BrockAllen.MembershipReboot;
 
 namespace FireGiant.MembershipReboot.AzureStorage
 {
-    public class AtsUserAccountService : UserAccountService<AtsUserAccount>
+    public class AtsUserService : UserAccountService<AtsUser>
     {
-        public AtsUserAccountService(AtsUserAccountConfig config, AtsUserAccountRepository repo)
+        public AtsUserService(AtsUserServiceConfig config, AtsUserRepository repo)
             : base(config, repo)
         {
         }
