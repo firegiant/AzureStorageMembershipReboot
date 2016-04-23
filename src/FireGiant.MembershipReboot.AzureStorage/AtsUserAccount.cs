@@ -13,6 +13,10 @@ namespace FireGiant.MembershipReboot.AzureStorage
 {
     public class AtsUserAccount : HierarchicalUserAccount, ITableEntity
     {
+        private const string ClaimValueEncodedPrefix = "base64:";
+        private const string ClaimNameValueSeparator = "=";
+        private const string ClaimSeparator = "\n";
+
         public AtsUserAccount()
         {
         }
@@ -244,16 +248,19 @@ namespace FireGiant.MembershipReboot.AzureStorage
             var start = 0;
             var end = -1;
 
-            while ((end = claims.IndexOf("\t", start, StringComparison.Ordinal)) > 0)
+            while ((end = claims.IndexOf(ClaimNameValueSeparator, start, StringComparison.Ordinal)) > 0)
             {
                 var type = claims.Substring(start, end - start);
 
                 start = end + 1;
-                end = claims.IndexOf("\n", start, StringComparison.Ordinal);
+                end = claims.IndexOf(ClaimSeparator, start, StringComparison.Ordinal);
 
                 var value = claims.Substring(start, end - start);
 
-                value = value.FromBase64();
+                if (value.StartsWith(ClaimValueEncodedPrefix, StringComparison.Ordinal))
+                {
+                    value = value.Substring(ClaimValueEncodedPrefix.Length).FromBase64();
+                }
 
                 this.AddClaim(new UserClaim(type, value));
 
@@ -272,7 +279,17 @@ namespace FireGiant.MembershipReboot.AzureStorage
 
             foreach (var claim in claims)
             {
-                result.AppendFormat("{0}\t{1}\n", claim.Type, claim.Value.ToBase64());
+                var value = claim.Value ?? String.Empty;
+
+                if (value.StartsWith(ClaimValueEncodedPrefix, StringComparison.Ordinal) || value.Contains(ClaimSeparator))
+                {
+                    value = ClaimValueEncodedPrefix + value.ToBase64();
+                }
+
+                result.Append(claim.Type);
+                result.Append(ClaimNameValueSeparator);
+                result.Append(value);
+                result.Append(ClaimSeparator);
             }
 
             return EntityProperty.GeneratePropertyForString(result.ToString());
