@@ -2,11 +2,14 @@
 
 using System;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace FireGiant.MembershipReboot.AzureStorage
 {
     internal static class StringExtensions
     {
+        private static readonly Regex UnsafeCharacters = new Regex(@"[^a-zA-Z\d~!@$%^&*()\-_=+\[\]{};:'"",<\.> \t]+", RegexOptions.CultureInvariant | RegexOptions.Singleline | RegexOptions.ExplicitCapture);
+
         public static string ToBase64(this string value)
         {
             if (String.IsNullOrEmpty(value))
@@ -16,6 +19,11 @@ namespace FireGiant.MembershipReboot.AzureStorage
 
             var bytes = Encoding.UTF8.GetBytes(value);
             return Convert.ToBase64String(bytes).Replace('+', '-').Replace('/', '_').TrimEnd('=');
+        }
+
+        public static string ToBase64IfUnsafe(this string value)
+        {
+            return UnsafeCharacters.IsMatch(value) ? value.ToBase64() : value;
         }
 
         public static string FromBase64(this string value)

@@ -24,12 +24,12 @@ namespace FireGiant.MembershipReboot.AzureStorage
 
         public static AtsUserReferenceKey ForUsername(string tenant, string username)
         {
-            return new AtsUserReferenceKey(tenant, "user|" + username.ToBase64());
+            return new AtsUserReferenceKey(tenant, "user|" + username.ToBase64IfUnsafe());
         }
 
         public static AtsUserReferenceKey ForEmail(string tenant, string email)
         {
-            return new AtsUserReferenceKey(tenant, "email|" + email.ToBase64());
+            return new AtsUserReferenceKey(tenant, "email|" + email.ToBase64IfUnsafe());
         }
 
         public static AtsUserReferenceKey ForPhoneNumber(string tenant, string phone)
@@ -44,7 +44,7 @@ namespace FireGiant.MembershipReboot.AzureStorage
 
         public static AtsUserReferenceKey ForLinkedAccount(string tenant, string provider, string id)
         {
-            return new AtsUserReferenceKey(tenant, "link|" + provider + "|" + id.ToBase64());
+            return new AtsUserReferenceKey(tenant, "link|" + provider + "|" + id.ToBase64IfUnsafe());
         }
 
         public static AtsUserReferenceKey ForCertificate(string tenant, string thumbprint)
