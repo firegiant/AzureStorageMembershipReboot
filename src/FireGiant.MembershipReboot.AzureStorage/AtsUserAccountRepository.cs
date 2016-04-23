@@ -21,7 +21,7 @@ namespace FireGiant.MembershipReboot.AzureStorage
 
         public AtsUserAccountRepository(CloudStorageAccount storage, AtsUserAccountConfig config)
         {
-            _defaultTenant = config.DefaultTenant ?? "default";
+            _defaultTenant = config.DefaultTenant;
 
             var client = storage.CreateCloudTableClient();
             _table = client.GetTableReference(config.TableName);

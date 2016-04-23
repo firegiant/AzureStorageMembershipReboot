@@ -7,15 +7,22 @@ namespace FireGiant.MembershipReboot.AzureStorage
 {
     public class AtsUserAccountConfig : MembershipRebootConfiguration<AtsUserAccount>
     {
-        public AtsUserAccountConfig(string connectionString, string tableName = null)
+        public AtsUserAccountConfig()
+            : this(null)
+        {
+        }
+
+        public AtsUserAccountConfig(string connectionString, string tableName = null, string tenant = null)
         {
             this.TableStorageConnectionString = connectionString;
 
             this.TableName = String.IsNullOrEmpty(tableName) ? "user" : tableName;
+
+            this.DefaultTenant = String.IsNullOrEmpty(tenant) ? "default" : tenant;
         }
 
-        public string TableStorageConnectionString { get; }
+        public string TableStorageConnectionString { get; set; }
 
-        public string TableName { get; }
+        public string TableName { get; set; }
     }
 }
