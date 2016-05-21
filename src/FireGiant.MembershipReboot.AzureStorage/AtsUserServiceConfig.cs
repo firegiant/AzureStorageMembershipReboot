@@ -12,13 +12,13 @@ namespace FireGiant.MembershipReboot.AzureStorage
         {
         }
 
-        public AtsUserServiceConfig(string connectionString, string tableName = null, string tenant = null)
+        public AtsUserServiceConfig(string connectionString, string tenant = null, string tableName = null)
         {
             this.TableStorageConnectionString = connectionString;
 
-            this.TableName = String.IsNullOrEmpty(tableName) ? "user" : tableName;
-
             this.DefaultTenant = String.IsNullOrEmpty(tenant) ? "default" : tenant;
+
+            this.TableName = String.IsNullOrEmpty(tableName) ? "user" : tableName;
         }
 
         public string TableStorageConnectionString { get; set; }
